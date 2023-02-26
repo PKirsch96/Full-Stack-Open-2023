@@ -19,7 +19,7 @@ const Hello = ({name, age}) =>{
 const Display = ({counter}) => <div> {counter} </div>
 
 //parametre la fonction des boutans
-const Button = ({ onClick, text}) => <button onClick = {onClick}>{text}</button> 
+const Button = ({ handleClick, text}) => <button onClick = {handleClick}> {text} </button> 
 
 const Header = (props) => {
   return <h1>{props.course.name}</h1>;
@@ -47,10 +47,40 @@ const Total = (props) => {
   return "Number of exercises : " + somme;
 };
 
+const History = (props) => {
+  if (props.allClicks.length === 0){
+    return(
+      <div>
+        the app is used by pressing the buttons
+      </div>
+    )
+  }
+  return (
+    <div>
+      button press history: {props.allClicks.join("  ")}
+    </div>
+  )
+}
 
 const App = () => {
   // définitions des constantes
   const [counter, setCounter] = useState(0)
+
+  const [left, setLeft] = useState(0)
+
+  const [right, setRight] = useState(0)
+  
+  const [allClicks, setAll] = useState([])
+
+  const handleLeftClick = () => {
+    setAll(allClicks.concat('L'))
+    setLeft(left + 1 )
+  }
+
+  const handleRightClick = () => {
+    setAll(allClicks.concat('R'))
+    setRight(right + 1 )
+  }
 
   const increaseByOne = () => setCounter(counter + 1)
 
@@ -59,7 +89,9 @@ const App = () => {
   const decreaseByOne = () => setCounter(counter - 1)
 
   const course ={ 
+
     name: "Half Stack application development",
+
     parts: [
     {
       name: "Fundamentals of React",
@@ -88,7 +120,7 @@ console.log("rendering ...", counter)
       <Total parts={course.parts} />
     </div>
     <div>
-      <Display counter = {counter} />
+      <p>Conteur : </p><Display counter = {counter} />
     </div>
     <div>
       <Button
@@ -103,6 +135,13 @@ console.log("rendering ...", counter)
         onClick = {decreaseByOne}
         text = "minus"
       />
+    </div>
+    <div>
+      {left}
+      <Button handleClick={handleLeftClick} text='left' />
+      <Button handleClick={handleRightClick} text='right' />
+      {right}
+      <History allClicks = {allClicks} />
     </div>
     </>
   );
